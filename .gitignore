@@ -1,0 +1,7 @@
+/data
+/out
+/out_final
+venv
+.env
+.DS_Store
+__pycache__/
