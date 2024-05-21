@@ -1,0 +1,5 @@
+1) To run the 1st script, files retrieved via sftp are stored in folders such as:
+/data/2023/06/24/TICK/XCME/20220624-TICK_xcme_eth_fut_eth.gz
+2) The generated files will be create in /out
+3) The run the 2nd script and will update files in /out
+4) To run the 3rd script, move the above processed files (including UTC time) to /data
