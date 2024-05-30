@@ -86,7 +86,7 @@ def process_files(base_dir, output_dir):
 
 # Base directory where the data files are located
 main_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-base_dir = os.path.join(main_dir, 'data')
+base_dir = os.path.join(main_dir, 'data_cme')
 
 # Directory where the output CSV files will be saved
 output_dir = os.path.join(main_dir, 'out')
