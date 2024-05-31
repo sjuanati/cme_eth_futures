@@ -2,6 +2,7 @@
 /data_steth
 /out
 /out_final
+/backup
 venv
 .env
 .DS_Store
