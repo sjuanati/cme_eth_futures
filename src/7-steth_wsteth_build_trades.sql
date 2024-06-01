@@ -1,4 +1,5 @@
 -- USD price for stETH (or wstETH-equivalent) from multiple chains via dex trades
+-- @dev: excluding trades where amount_usd < 1, as the price sometimes give big spikes in very small trades
 
 with
     prices as (
@@ -6,6 +7,8 @@ with
             block_time,
             blockchain,
             project,
+            amount_usd,
+            tx_hash,
             case
                 when
                     blockchain = 'ethereum'
@@ -74,17 +77,40 @@ with
             p.blockchain,
             p.project,
             p.asset,
+            p.tx_hash,
+            p.amount_usd,
             case when asset = 'wstETH' then usd_price / coalesce(r.wsteth_steth_rate, -1) else usd_price end as usd_price,
             r.wsteth_steth_rate
         from prices p
         left join rates r
             on date(block_time) = date(r.rebase_time_utc)
+        where p.amount_usd > 1
     )
+
+-- aggregated query to minimize the credit consumption when dumping data into csv files
 
 select
     date_trunc('minute', block_time) as block_time,
     format('%.2f', avg(usd_price)) as usd_price
 from final
-where usd_price > 0
+where usd_price > 0  -- exclude data if no rate conversion was found
+and usd_price < 5000 -- exclude outliers (wrong price calculation)
 group by 1
 order by block_time asc
+
+
+-- detailed query
+/*
+select
+    block_time,
+    blockchain,
+    project,
+    asset,
+    amount_usd,
+    format('%.2f', usd_price) as usd_price,
+    tx_hash
+from final
+where usd_price > 0
+and usd_price < 5000
+order by block_time asc
+*/
