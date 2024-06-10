@@ -15,7 +15,7 @@ def merge_csv_files(output_dir, merged_file_name):
                 reader = csv.reader(file)
                 next(reader)  # Skip the header
                 for row in reader:
-                    all_data.append(row)
+                    all_data.append([row[1], row[2]]) # only UTC date and price columns
 
     # Write all data to the merged file
     with open(merged_file_path, 'w', newline='', encoding='utf-8') as merged_file:
