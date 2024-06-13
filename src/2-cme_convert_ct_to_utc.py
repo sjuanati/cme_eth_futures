@@ -1,6 +1,6 @@
 import os
 import csv
-from datetime import datetime
+from datetime import datetime, timedelta
 import pytz
 
 def read_csv_file(file_path):
@@ -33,7 +33,9 @@ def process_files(output_dir):
             for row in data_rows:
                 entry_date_ct_str = row[0]
                 entry_date_ct = datetime.strptime(entry_date_ct_str, '%Y%m%dT%H:%M:%S')
-                entry_date_ct = central.localize(entry_date_ct)
+                # entry_date_ct = central.localize(entry_date_ct)
+                entry_date_ct = central.localize(entry_date_ct, is_dst=False)
+                # entry_date_ct = central.localize(entry_date_ct, is_dst=False) - timedelta(hours=1)
                 entry_date_utc = entry_date_ct.astimezone(utc)
                 entry_date_utc_str = entry_date_utc.strftime('%Y%m%dT%H:%M:%S')
 
